@@ -1,0 +1,9 @@
+E/D Vault - Encryption and Decryption Vault
+
+This is my first encryption test.
+
+This file will be protected using:
+AES-256-GCM
+Scrypt Key Derivation
+
+Secure Your Files. Protect Your Privacy.

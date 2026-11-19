@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Security Settings | E/D Vault</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #080d19;
+            color: #e8efff;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+            padding: 30px 20px;
+            background: #0d1424;
+            border-right: 1px solid #1b2942;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .brand span {
+            color: #3d9cff;
+        }
+
+        .tagline {
+            color: #8494b2;
+            font-size: 12px;
+            margin-bottom: 45px;
+        }
+
+        .nav-title {
+            color: #71819f;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .nav-link {
+            display: block;
+            text-decoration: none;
+            color: #aebbd2;
+            padding: 13px 15px;
+            border-radius: 9px;
+            margin-bottom: 8px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #14294a;
+            color: #55aaff;
+        }
+
+        .main {
+            flex: 1;
+            padding: 45px;
+            max-width: 1100px;
+        }
+
+        .top-label {
+            color: #50a5ff;
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #91a0ba;
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+
+        .settings-card {
+            background: #101a2d;
+            border: 1px solid #203451;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 650px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-heading {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .card-description {
+            color: #91a0ba;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #cbd7eb;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background: #091222;
+            border: 1px solid #293d5b;
+            border-radius: 9px;
+            color: white;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #399cff;
+            box-shadow: 0 0 0 3px rgba(57, 156, 255, 0.12);
+        }
+
+        .hint {
+            color: #788ba9;
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(90deg, #1675e8, #35a8ff);
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            filter: brightness(1.12);
+        }
+
+        .security-note {
+            margin-top: 25px;
+            padding: 17px;
+            border-radius: 10px;
+            background: #0b2030;
+            border: 1px solid #174363;
+            color: #9ecfff;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .flash {
+            max-width: 650px;
+            padding: 13px 16px;
+            border-radius: 9px;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .flash.success {
+            background: #103326;
+            border: 1px solid #216c4a;
+            color: #8cf0bd;
+        }
+
+        .flash.danger {
+            background: #351b25;
+            border: 1px solid #793345;
+            color: #ffabb9;
+        }
+
+        @media (max-width: 750px) {
+            body {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                padding: 20px;
+            }
+
+            .tagline {
+                margin-bottom: 20px;
+            }
+
+            .main {
+                padding: 25px 18px;
+            }
+
+            .settings-card {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">E/D <span>Vault</span></div>
+        <div class="tagline">Secure Your Files. Protect Your Privacy.</div>
+
+        <div class="nav-title">MAIN MENU</div>
+
+        <a class="nav-link" href="{{ url_for('auth.dashboard') }}">
+            Dashboard
+        </a>
+
+        <a class="nav-link" href="{{ url_for('files.encrypt_upload') }}">
+            Encrypt Files
+        </a>
+
+        <a class="nav-link" href="{{ url_for('files.decrypt_upload') }}">
+            Decrypt Files
+        </a>
+
+        <a class="nav-link" href="{{ url_for('files.my_vault') }}">
+            My Vault
+        </a>
+
+        <a class="nav-link" href="{{ url_for('activity.history') }}">
+            Activity History
+        </a>
+
+        <a class="nav-link active" href="{{ url_for('settings.security_settings') }}">
+            Security Settings
+        </a>
+    </aside>
+
+    <main class="main">
+
+        <div class="top-label">ACCOUNT PROTECTION</div>
+
+        <h1>Security Settings</h1>
+
+        <p class="subtitle">
+            Manage your account security and protect access to your E/D Vault account.
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <section class="settings-card">
+
+            <h2 class="card-heading">Change Account Password</h2>
+
+            <p class="card-description">
+                Verify your current password before creating a new account password.
+            </p>
+
+            <form method="POST" action="{{ url_for('settings.security_settings') }}">
+
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+                <div class="form-group">
+                    <label for="current_password">Current Password</label>
+
+                    <input
+                        type="password"
+                        id="current_password"
+                        name="current_password"
+                        placeholder="Enter your current password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="new_password">New Password</label>
+
+                    <input
+                        type="password"
+                        id="new_password"
+                        name="new_password"
+                        placeholder="Create a new password"
+                        minlength="12"
+                        maxlength="128"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                    <div class="hint">
+                        Minimum 12 characters and maximum 128 characters.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm New Password</label>
+
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        placeholder="Enter your new password again"
+                        minlength="12"
+                        maxlength="128"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <button type="submit">
+                    Update Password
+                </button>
+
+            </form>
+
+            <div class="security-note">
+                <strong>Security information</strong><br>
+                Your account password is stored as a secure password hash.
+                Changing it does not change the passwords used to encrypt or
+                decrypt your files. After a successful change, you will need
+                to log in again.
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

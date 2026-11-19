@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Decrypt File | E/D Vault</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #080f1e;
+            color: #ffffff;
+        }
+
+        header {
+            padding: 20px 7%;
+            background: #111c30;
+            border-bottom: 1px solid #263650;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            color: #60a5fa;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        header a {
+            color: #bfdbfe;
+            text-decoration: none;
+        }
+
+        .page {
+            max-width: 800px;
+            margin: 55px auto;
+            padding: 20px;
+        }
+
+        .heading {
+            margin-bottom: 28px;
+        }
+
+        .heading h1 {
+            color: #60a5fa;
+        }
+
+        .heading p {
+            color: #a8b6ca;
+            line-height: 1.6;
+        }
+
+        .card {
+            padding: 30px;
+            background: #111c30;
+            border: 1px solid #263650;
+            border-radius: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #dbeafe;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="password"] {
+            width: 100%;
+            padding: 14px;
+            background: #091426;
+            border: 1px solid #344762;
+            border-radius: 8px;
+            color: white;
+            outline: none;
+        }
+
+        select:focus,
+        input[type="password"]:focus {
+            border-color: #3b82f6;
+        }
+
+        .field {
+            margin-top: 24px;
+        }
+
+        .hint {
+            margin-top: 8px;
+            color: #94a3b8;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .submit-button {
+            width: 100%;
+            margin-top: 28px;
+            padding: 15px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background: #1d4ed8;
+        }
+
+        .message {
+            padding: 13px;
+            margin-bottom: 13px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .success {
+            background: #143c2c;
+            color: #bbf7d0;
+        }
+
+        .danger {
+            background: #451d28;
+            color: #fecaca;
+        }
+
+        .warning {
+            background: #493719;
+            color: #fde68a;
+        }
+
+        .empty {
+            padding: 22px;
+            background: #0b172a;
+            border: 1px solid #263650;
+            border-radius: 10px;
+            color: #a8b6ca;
+            line-height: 1.6;
+        }
+
+        .security {
+            margin-top: 22px;
+            padding: 17px;
+            background: #0b172a;
+            border: 1px solid #263650;
+            border-radius: 9px;
+            color: #a8b6ca;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 17px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">E/D VAULT</div>
+        <a href="{{ url_for('auth.dashboard') }}">Dashboard</a>
+    </header>
+
+    <main class="page">
+
+        <div class="heading">
+            <h1>Decrypt Your File</h1>
+
+            <p>
+                Restore your original file using the correct
+                encryption password.
+            </p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <section class="card">
+
+            {% if vault_files %}
+
+                <form
+                    method="POST"
+                    action="{{ url_for('files.decrypt_upload') }}"
+                >
+
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                    >
+
+                    <div class="field">
+                        <label for="file_id">
+                            Select an encrypted file
+                        </label>
+
+                        <select id="file_id" name="file_id" required>
+                            <option value="">Choose your file</option>
+
+                            {% for file in vault_files %}
+                                <option value="{{ file.id }}">
+                                    {{ file.original_filename }}
+                                    ({{ file.file_size }} bytes)
+                                </option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="encryption_password">
+                            Encryption Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="encryption_password"
+                            name="encryption_password"
+                            placeholder="Enter the original encryption password"
+                            maxlength="128"
+                            autocomplete="off"
+                            required
+                        >
+
+                        <p class="hint">
+                            Enter the same password that you used
+                            when encrypting this file.
+                        </p>
+                    </div>
+
+                    <button class="submit-button" type="submit">
+                        🔓 Decrypt and Download
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <div class="empty">
+                    <h3>No encrypted files found</h3>
+
+                    <p>
+                        You have not encrypted any files yet.
+                        Encrypt a file first, and it will appear here.
+                    </p>
+
+                    <a
+                        href="{{ url_for('files.encrypt_upload') }}"
+                        style="color: #60a5fa;"
+                    >
+                        Go to File Encryption
+                    </a>
+                </div>
+
+            {% endif %}
+
+            <div class="security">
+                <strong>Decryption security</strong><br>
+                • AES-256-GCM authentication verifies file integrity.<br>
+                • Incorrect passwords are rejected.<br>
+                • Modified or corrupted encrypted files are rejected.<br>
+                • Restored plaintext is temporarily stored for download.<br>
+                • Your encryption password is never saved.
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

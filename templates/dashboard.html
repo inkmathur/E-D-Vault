@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | E/D Vault</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #080d19;
+            color: #e8efff;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+            padding: 30px 20px;
+            background: #0d1424;
+            border-right: 1px solid #1b2942;
+        }
+
+        .brand {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .brand span {
+            color: #3d9cff;
+        }
+
+        .tagline {
+            color: #8494b2;
+            font-size: 12px;
+            margin-bottom: 45px;
+        }
+
+        .nav-title {
+            color: #71819f;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 13px 15px;
+            margin-bottom: 8px;
+            border-radius: 9px;
+            text-decoration: none;
+            color: #aebbd2;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #14294a;
+            color: #55aaff;
+        }
+
+        .main {
+            flex: 1;
+            padding: 40px;
+            max-width: 1250px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .welcome-label {
+            color: #50a5ff;
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #91a0ba;
+            line-height: 1.6;
+        }
+
+        .logout-form button {
+            padding: 11px 20px;
+            border: 1px solid #344663;
+            background: #111d31;
+            color: #dce8ff;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-form button:hover {
+            border-color: #399cff;
+            color: #55aaff;
+        }
+
+        .hero {
+            background: linear-gradient(115deg, #10284a, #102039 65%, #112d4a);
+            border: 1px solid #244a73;
+            border-radius: 18px;
+            padding: 35px;
+            margin-bottom: 35px;
+        }
+
+        .hero-label {
+            color: #65b6ff;
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .hero h2 {
+            font-size: 27px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            color: #b3c7e4;
+            max-width: 650px;
+            line-height: 1.7;
+        }
+
+        .section-heading {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .quick-card {
+            display: block;
+            padding: 24px;
+            background: #101a2d;
+            border: 1px solid #203451;
+            border-radius: 15px;
+            text-decoration: none;
+            color: #e8efff;
+            transition: 0.2s;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-4px);
+            border-color: #399cff;
+            background: #14233b;
+        }
+
+        .card-icon {
+            width: 43px;
+            height: 43px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 11px;
+            background: #17365c;
+            color: #69baff;
+            font-size: 21px;
+            margin-bottom: 18px;
+        }
+
+        .quick-card h3 {
+            font-size: 17px;
+            margin-bottom: 9px;
+        }
+
+        .quick-card p {
+            color: #91a0ba;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .footer-note {
+            color: #6f809d;
+            font-size: 12px;
+            margin-top: 35px;
+        }
+
+        @media (max-width: 800px) {
+            body {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                padding: 20px;
+            }
+
+            .tagline {
+                margin-bottom: 20px;
+            }
+
+            .main {
+                padding: 25px 18px;
+            }
+
+            .quick-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="brand">E/D <span>Vault</span></div>
+        <div class="tagline">Secure Your Files. Protect Your Privacy.</div>
+
+        <div class="nav-title">MAIN MENU</div>
+
+        <a class="nav-link active" href="{{ url_for('auth.dashboard') }}">
+            Dashboard
+        </a>
+
+        <a class="nav-link" href="{{ url_for('files.encrypt_upload') }}">
+            Encrypt Files
+        </a>
+
+        <a class="nav-link" href="{{ url_for('files.decrypt_upload') }}">
+            Decrypt Files
+        </a>
+
+        <a class="nav-link" href="{{ url_for('files.my_vault') }}">
+            My Vault
+        </a>
+
+        <a class="nav-link" href="{{ url_for('activity.history') }}">
+            Activity History
+        </a>
+
+        <a class="nav-link" href="{{ url_for('settings.security_settings') }}">
+            Security Settings
+        </a>
+
+    </aside>
+
+    <main class="main">
+
+        <div class="topbar">
+            <div>
+                <div class="welcome-label">SECURE FILE MANAGEMENT</div>
+                <h1>Welcome, {{ user.username }}</h1>
+                <p class="subtitle">
+                    Your personal encrypted file management dashboard.
+                </p>
+            </div>
+
+            <form class="logout-form"
+                  method="POST"
+                  action="{{ url_for('auth.logout') }}">
+
+                <input type="hidden"
+                       name="csrf_token"
+                       value="{{ csrf_token() }}">
+
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+
+        <section class="hero">
+            <div class="hero-label">E/D VAULT · VERSION 1.0</div>
+
+            <h2>Your Files. Your Privacy. Your Control.</h2>
+
+            <p>
+                Protect your important files using AES-256-GCM encryption.
+                Encrypt files, decrypt protected documents, manage your
+                private vault and monitor your account activity from one place.
+            </p>
+        </section>
+
+        <h2 class="section-heading">Quick Access</h2>
+
+        <div class="quick-grid">
+
+            <a class="quick-card"
+               href="{{ url_for('files.encrypt_upload') }}">
+                <div class="card-icon">🔐</div>
+                <h3>Encrypt Files</h3>
+                <p>Secure your files with strong AES-256-GCM encryption.</p>
+            </a>
+
+            <a class="quick-card"
+               href="{{ url_for('files.decrypt_upload') }}">
+                <div class="card-icon">🔓</div>
+                <h3>Decrypt Files</h3>
+                <p>Restore your encrypted files using the correct password.</p>
+            </a>
+
+            <a class="quick-card"
+               href="{{ url_for('files.my_vault') }}">
+                <div class="card-icon">🗄️</div>
+                <h3>My Vault</h3>
+                <p>View, download and manage your encrypted files.</p>
+            </a>
+
+            <a class="quick-card"
+               href="{{ url_for('activity.history') }}">
+                <div class="card-icon">📋</div>
+                <h3>Activity History</h3>
+                <p>Review your recent encryption and file-management activities.</p>
+            </a>
+
+            <a class="quick-card"
+               href="{{ url_for('settings.security_settings') }}">
+                <div class="card-icon">🛡️</div>
+                <h3>Security Settings</h3>
+                <p>Change your account password and manage account security.</p>
+            </a>
+
+        </div>
+
+        <div class="footer-note">
+            E/D Vault © 2026 · Secure Your Files. Protect Your Privacy.
+        </div>
+
+    </main>
+
+</body>
+</html>

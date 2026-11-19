@@ -1,0 +1,356 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypt File | E/D Vault</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #080f1e;
+            color: #ffffff;
+        }
+
+        header {
+            padding: 20px 7%;
+            background: #111c30;
+            border-bottom: 1px solid #263650;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            color: #60a5fa;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: #60a5fa;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 850px;
+            margin: 55px auto;
+            padding: 20px;
+        }
+
+        .heading {
+            margin-bottom: 28px;
+        }
+
+        .heading h1 {
+            margin-bottom: 8px;
+            color: #60a5fa;
+        }
+
+        .heading p {
+            color: #a8b6ca;
+            line-height: 1.6;
+        }
+
+        .card {
+            padding: 32px;
+            background: #111c30;
+            border: 1px solid #263650;
+            border-radius: 15px;
+        }
+
+        .upload-area {
+            display: block;
+            padding: 35px 20px;
+            text-align: center;
+            border: 2px dashed #3b82f6;
+            border-radius: 12px;
+            background: #0b172a;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            background: #12233d;
+        }
+
+        .upload-icon {
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .upload-area strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #dbeafe;
+        }
+
+        .upload-area span {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            margin-top: 18px;
+            color: #cbd5e1;
+        }
+
+        .field {
+            margin-top: 23px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 9px;
+            color: #dbeafe;
+            font-weight: bold;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 14px;
+            background: #091426;
+            border: 1px solid #344762;
+            border-radius: 8px;
+            color: white;
+            outline: none;
+        }
+
+        input[type="password"]:focus {
+            border-color: #3b82f6;
+        }
+
+        .hint {
+            margin-top: 8px;
+            color: #94a3b8;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .submit-button {
+            width: 100%;
+            margin-top: 28px;
+            padding: 15px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background: #1d4ed8;
+        }
+
+        .message {
+            padding: 13px;
+            margin-bottom: 13px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .success {
+            background: #143c2c;
+            color: #bbf7d0;
+        }
+
+        .danger {
+            background: #451d28;
+            color: #fecaca;
+        }
+
+        .warning {
+            background: #493719;
+            color: #fde68a;
+        }
+
+        .info {
+            margin-top: 22px;
+            padding: 17px;
+            background: #0b172a;
+            border: 1px solid #263650;
+            border-radius: 9px;
+            color: #a8b6ca;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .logout-button {
+            padding: 9px 13px;
+            background: #263650;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 17px;
+                flex-wrap: wrap;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">E/D VAULT</div>
+
+        <nav class="nav-links">
+            <a href="{{ url_for('auth.dashboard') }}">Dashboard</a>
+
+            <form method="POST" action="{{ url_for('auth.logout') }}">
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+                <button class="logout-button" type="submit">
+                    Logout
+                </button>
+            </form>
+        </nav>
+    </header>
+
+    <main class="page">
+
+        <div class="heading">
+            <h1>Encrypt Your File</h1>
+
+            <p>
+                Protect your personal files using AES-256-GCM
+                encryption and Scrypt key derivation.
+            </p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <section class="card">
+
+            <form
+                method="POST"
+                action="{{ url_for('files.encrypt_upload') }}"
+                enctype="multipart/form-data"
+            >
+
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+                <label class="upload-area" for="file">
+                    <div class="upload-icon">📁</div>
+
+                    <strong>Select a file to encrypt</strong>
+
+                    <span>Maximum file size: 100 MB</span>
+                </label>
+
+                <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    required
+                >
+
+                <div class="field">
+                    <label for="encryption_password">
+                        Encryption Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="encryption_password"
+                        name="encryption_password"
+                        placeholder="Create a strong encryption password"
+                        minlength="12"
+                        maxlength="128"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                    <p class="hint">
+                        Use at least 12 characters. Remember this password:
+                        it is not stored and is required to decrypt your file.
+                    </p>
+                </div>
+
+                <div class="field">
+                    <label for="confirm_password">
+                        Confirm Encryption Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        placeholder="Enter the encryption password again"
+                        minlength="12"
+                        maxlength="128"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <button class="submit-button" type="submit">
+                    🔒 Encrypt File Securely
+                </button>
+
+            </form>
+
+            <div class="info">
+                <strong>Security information</strong><br>
+                • Encryption uses AES-256-GCM.<br>
+                • Scrypt derives the encryption key from your password.<br>
+                • Every encryption operation uses a new random salt and nonce.<br>
+                • Your plaintext file is removed from temporary storage after processing.<br>
+                • Your encryption password is never saved in the database.
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,666 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Activity History | E/D Vault</title>
+
+    <style>
+        :root {
+            --bg: #080d18;
+            --sidebar: #0c1424;
+            --panel: #111c30;
+            --border: #24344e;
+            --blue: #3985ff;
+            --text: #edf3ff;
+            --muted: #8b9bb5;
+            --green: #35d69a;
+            --red: #ff626d;
+            --purple: #c49aff;
+            --orange: #ffbd69;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .layout {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 240px;
+            min-width: 240px;
+            background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            padding: 27px 17px;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            padding: 0 10px;
+            margin-bottom: 45px;
+        }
+
+        .brand span {
+            color: #69a5ff;
+        }
+
+        .nav-label {
+            color: #61718b;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.7px;
+            padding: 0 12px;
+            margin-bottom: 12px;
+        }
+
+        .nav-link {
+            display: block;
+            color: var(--muted);
+            padding: 13px 14px;
+            border-radius: 9px;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #1a3153;
+            color: white;
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 32px 38px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .status {
+            color: var(--green);
+            background: #10352e;
+            border: 1px solid #21694c;
+            border-radius: 25px;
+            padding: 9px 13px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 13px;
+            margin-bottom: 30px;
+        }
+
+        .stat {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 19px;
+            border-radius: 12px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .stat-number {
+            font-size: 25px;
+            font-weight: 800;
+            margin-top: 12px;
+        }
+
+        .section {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 22px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .section-heading h2 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .section-heading p {
+            font-size: 12px;
+            color: var(--muted);
+            margin: 6px 0 0;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+
+        .filters input,
+        .filters select {
+            background: #0b1526;
+            border: 1px solid #30415d;
+            color: white;
+            border-radius: 8px;
+            padding: 11px 13px;
+            min-width: 180px;
+            outline: none;
+        }
+
+        .filters input:focus,
+        .filters select:focus {
+            border-color: var(--blue);
+        }
+
+        .filter-button {
+            background: var(--blue);
+            color: white;
+            border: none;
+            padding: 11px 19px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .filter-button:hover {
+            background: #246be0;
+        }
+
+        .reset-button {
+            color: var(--muted);
+            border: 1px solid var(--border);
+            padding: 11px 16px;
+            border-radius: 8px;
+        }
+
+        .reset-button:hover {
+            color: white;
+            background: #1a3153;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 17px 5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 43px;
+            height: 43px;
+            min-width: 43px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            font-size: 19px;
+            background: #1b3458;
+        }
+
+        .activity-icon.encrypted {
+            color: #77adff;
+        }
+
+        .activity-icon.decrypted {
+            color: var(--green);
+            background: #10352e;
+        }
+
+        .activity-icon.downloaded {
+            color: var(--purple);
+            background: #30234b;
+        }
+
+        .activity-icon.deleted {
+            color: var(--red);
+            background: #48232e;
+        }
+
+        .activity-icon.integrity {
+            color: var(--orange);
+            background: #493719;
+        }
+
+        .activity-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-title {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .activity-file {
+            color: var(--muted);
+            font-size: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .activity-date {
+            color: var(--muted);
+            font-size: 11px;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .activity-time {
+            margin-top: 5px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 55px 15px;
+            color: var(--muted);
+        }
+
+        .empty-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .empty h3 {
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            margin-top: 28px;
+            padding-top: 17px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        @media (max-width: 1050px) {
+            .stats {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 700px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+                padding: 16px;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .brand {
+                margin-bottom: 17px;
+            }
+
+            .sidebar nav {
+                display: flex;
+                gap: 5px;
+                overflow-x: auto;
+            }
+
+            .nav-label {
+                display: none;
+            }
+
+            .nav-link {
+                white-space: nowrap;
+                margin: 0;
+            }
+
+            .main {
+                padding: 22px 15px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .activity-item {
+                align-items: flex-start;
+            }
+
+            .activity-date {
+                white-space: normal;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .activity-date {
+                display: none;
+            }
+
+            .filters input,
+            .filters select,
+            .filter-button,
+            .reset-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            E/D <span>VAULT</span>
+        </div>
+
+        <div class="nav-label">WORKSPACE</div>
+
+        <nav>
+            <a class="nav-link"
+               href="{{ url_for('auth.dashboard') }}">
+                ▦ Dashboard
+            </a>
+
+            <a class="nav-link"
+               href="{{ url_for('files.encrypt_upload') }}">
+                🔒 Encrypt Files
+            </a>
+
+            <a class="nav-link"
+               href="{{ url_for('files.decrypt_upload') }}">
+                🔓 Decrypt Files
+            </a>
+
+            <a class="nav-link"
+               href="{{ url_for('files.my_vault') }}">
+                🗄 My Vault
+            </a>
+
+            <a class="nav-link active"
+               href="{{ url_for('activity.history') }}">
+                ◷ Activity History
+            </a>
+
+            <a class="nav-link"
+               href="{{ url_for('settings.security_settings') }}">
+                ⚙ Security Settings
+            </a>
+        </nav>
+
+    </aside>
+
+    <main class="main">
+
+        <header class="header">
+
+            <div>
+                <h1>Activity History</h1>
+
+                <p class="subtitle">
+                    Monitor the security activities performed in your vault.
+                </p>
+            </div>
+
+            <div class="status">
+                ● ACTIVITY TRACKING
+            </div>
+
+        </header>
+
+        <!-- STATISTICS -->
+
+        <section class="stats">
+
+            <div class="stat">
+                <div class="stat-label">TOTAL ACTIVITIES</div>
+                <div class="stat-number">{{ total_activities }}</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-label">FILES ENCRYPTED</div>
+                <div class="stat-number" style="color:#77adff;">
+                    {{ encrypted_count }}
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-label">FILES DECRYPTED</div>
+                <div class="stat-number" style="color:#35d69a;">
+                    {{ decrypted_count }}
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-label">FILES DOWNLOADED</div>
+                <div class="stat-number" style="color:#c49aff;">
+                    {{ download_count }}
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-label">FILES DELETED</div>
+                <div class="stat-number" style="color:#ff626d;">
+                    {{ deleted_count }}
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-label">INTEGRITY CHECKS</div>
+                <div class="stat-number" style="color:#ffbd69;">
+                    {{ integrity_count }}
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ACTIVITY RECORDS -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Recent Activities</h2>
+                    <p>Showing up to the latest 100 matching records.</p>
+                </div>
+
+            </div>
+
+            <!-- FILTERS -->
+
+            <form method="GET"
+                  action="{{ url_for('activity.history') }}"
+                  class="filters">
+
+                <input
+                    type="search"
+                    name="search"
+                    value="{{ search_query }}"
+                    placeholder="Search filename..."
+                    maxlength="255"
+                    aria-label="Search activity by filename"
+                >
+
+                <select name="action" aria-label="Filter activity type">
+
+                    <option value="">All activities</option>
+
+                    {% for action_code, action_name in activity_types.items() %}
+
+                        <option
+                            value="{{ action_code }}"
+                            {% if selected_action == action_code %}selected{% endif %}
+                        >
+                            {{ action_name }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+                <button class="filter-button" type="submit">
+                    Apply Filters
+                </button>
+
+                <a class="reset-button"
+                   href="{{ url_for('activity.history') }}">
+                    Reset
+                </a>
+
+            </form>
+
+            <!-- ACTIVITY RECORDS -->
+
+            <div class="activity-list">
+
+                {% if activities %}
+
+                    {% for item in activities %}
+
+                        <div class="activity-item">
+
+                            {% if item.action == "FILE_ENCRYPTED" %}
+
+                                <div class="activity-icon encrypted">🔒</div>
+
+                            {% elif item.action == "FILE_DECRYPTED" %}
+
+                                <div class="activity-icon decrypted">🔓</div>
+
+                            {% elif item.action == "FILE_DOWNLOADED" %}
+
+                                <div class="activity-icon downloaded">↓</div>
+
+                            {% elif item.action == "FILE_DELETED" %}
+
+                                <div class="activity-icon deleted">✕</div>
+
+                            {% elif item.action == "FILE_INTEGRITY_CHECKED" %}
+
+                                <div class="activity-icon integrity">✓</div>
+
+                            {% else %}
+
+                                <div class="activity-icon">•</div>
+
+                            {% endif %}
+
+                            <div class="activity-info">
+
+                                <div class="activity-title">
+                                    {{ activity_types.get(item.action, "Other Activity") }}
+                                </div>
+
+                                <div class="activity-file">
+
+                                    {% if item.filename %}
+                                        {{ item.filename }}
+                                    {% else %}
+                                        No filename recorded
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                            <div class="activity-date">
+
+                                {{ item.created_at.strftime("%d %b %Y") }}
+
+                                <div class="activity-time">
+                                    {{ item.created_at.strftime("%I:%M %p") }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty">
+
+                        <div class="empty-icon">◷</div>
+
+                        <h3>No activities found</h3>
+
+                        <p>
+                            Your activities will appear here when you
+                            encrypt, decrypt, download, delete files
+                            or verify file integrity.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+        <footer class="footer">
+            E/D Vault · Secure Your Files. Protect Your Privacy.
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

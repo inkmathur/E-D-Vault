@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | E/D Vault</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background: #080f1e;
+            color: #ffffff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 430px;
+            padding: 35px;
+            background: #111c30;
+            border: 1px solid #263650;
+            border-radius: 16px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 29px;
+            font-weight: bold;
+            color: #60a5fa;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #a8b6ca;
+            margin: 10px 0 28px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin: 17px 0 7px;
+            color: #dbeafe;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border-radius: 8px;
+            border: 1px solid #344762;
+            background: #091426;
+            color: white;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #3b82f6;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible {
+            outline: 2px solid #60a5fa;
+            outline-offset: 3px;
+        }
+
+        .message {
+            padding: 11px;
+            border-radius: 7px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .danger {
+            background: #451d28;
+            color: #fecaca;
+        }
+
+        .success {
+            background: #143c2c;
+            color: #bbf7d0;
+        }
+
+        .warning {
+            background: #493719;
+            color: #fde68a;
+        }
+
+        .info {
+            background: #17365c;
+            color: #bfdbfe;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 23px;
+            color: #a8b6ca;
+            font-size: 14px;
+        }
+
+        a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <div class="logo">E/D VAULT</div>
+
+        <p class="subtitle">
+            Secure Your Files. Protect Your Privacy.
+        </p>
+
+        <h2>Welcome Back</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                {% set message_class = category if category in ['danger', 'success', 'warning'] else 'info' %}
+                <div class="message {{ message_class }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST"
+              action="{{ url_for('auth.login') }}">
+
+            <input type="hidden"
+                   name="csrf_token"
+                   value="{{ csrf_token() }}">
+
+            <label for="identifier">Username or Email</label>
+
+            <input
+                type="text"
+                id="identifier"
+                name="identifier"
+                placeholder="Enter username or email"
+                maxlength="120"
+                autocomplete="username"
+                required
+            >
+
+            <label for="password">Password</label>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                maxlength="128"
+                autocomplete="current-password"
+                required
+            >
+
+            <button type="submit">Login Securely</button>
+
+        </form>
+
+        <div class="footer">
+            Don't have an account?
+            <a href="{{ url_for('auth.register') }}">Create Account</a>
+        </div>
+
+    </main>
+
+</body>
+</html>
