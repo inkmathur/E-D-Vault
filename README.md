@@ -1,26 +1,25 @@
 # E/D Vault 🔐
 ### Encryption and Decryption Vault
 
-**Secure Your Files. Protect Your Privacy.**
+<p align="center">
+  <img src="assets/ed-vault-banner.png" alt="E/D Vault Cybersecurity Banner" width="100%">
+</p>
 
-E/D Vault is a Python-based cybersecurity web application designed to protect sensitive files through strong encryption and secure file management.
+<p align="center">
+  **Secure Your Files. Protect Your Privacy.**
+</p>
 
-It uses **AES-256-GCM encryption**, **Scrypt key derivation**, and **SHA-256 integrity verification** to help protect files against unauthorized access and tampering.
+<p align="center">
+  A personal cybersecurity project focused on file encryption, decryption, cryptography, and data protection.
+</p>
 
 ---
 
 ## 🚀 Project Overview
 
-E/D Vault allows users to:
+E/D Vault is a Python-based cybersecurity web application designed to protect sensitive files through strong encryption and secure file management.
 
-- Register and securely log in.
-- Upload files and encrypt them with a password.
-- Download encrypted files in `.edv` format.
-- Decrypt files using the correct encryption password.
-- Store and manage encrypted files in a personal vault.
-- Verify file integrity using SHA-256.
-- View file activity history.
-- Manage account security settings.
+It uses **AES-256-GCM encryption**, **Scrypt key derivation**, and **SHA-256 integrity verification** to help protect files against unauthorized access and tampering.
 
 ## 🛡️ Security Technologies
 
@@ -31,28 +30,17 @@ E/D Vault allows users to:
 | SHA-256 | File integrity verification |
 | Werkzeug | Account password hashing |
 | Flask-Limiter | Login and request rate limiting |
-| Flask-WTF / CSRF protection | Form request protection |
+| Flask-WTF | CSRF protection |
 | Secure Sessions | Session and cookie security |
 | SQLite | Application database |
 
 ## ⚙️ Technology Stack
 
-**Backend**
-- Python
-- Flask
-- Flask-SQLAlchemy
-- SQLite
+**Backend:** Python, Flask, Flask-SQLAlchemy, SQLite
 
-**Frontend**
-- HTML5
-- CSS3
-- JavaScript
+**Frontend:** HTML5, CSS3, JavaScript
 
-**Cryptography**
-- PyCA Cryptography
-- AES-256-GCM
-- Scrypt
-- SHA-256
+**Cryptography:** PyCA Cryptography, AES-256-GCM, Scrypt, SHA-256
 
 ## ✨ Core Features
 
@@ -91,6 +79,12 @@ E/D Vault allows users to:
 - View recent activity.
 - Search and filter activity records.
 
+### 7. Security Controls
+- CSRF protection.
+- Upload validation and file size restrictions.
+- Security response headers.
+- Account and file access controls.
+
 ## 🔄 How It Works
 
 **Encryption workflow**
@@ -112,6 +106,20 @@ E/D Vault allows users to:
 5. AES-256-GCM verifies and decrypts the data.
 6. The decrypted file becomes available only after successful authentication.
 
+## 🏗️ System Architecture and Diagrams
+
+The project includes diagrams explaining its architecture and security workflows.
+
+See **[DIAGRAMS.md](DIAGRAMS.md)** for:
+
+- Overall system architecture.
+- User authentication flow.
+- File encryption workflow.
+- File decryption workflow.
+- Database ER diagram.
+- Encrypted file structure.
+- Security architecture.
+
 ## 📁 Project Structure
 
 ```text
@@ -120,35 +128,26 @@ E_D Vault/
 ├── app.py
 ├── config.py
 ├── extensions.py
+├── migrate_integrity.py
 │
 ├── authentication/
-│   └── routes.py
-│
 ├── database/
-│   ├── db.py
-│   └── models.py
-│
 ├── encryption/
-│   ├── key_manager.py
-│   ├── file_format.py
-│   ├── encrypt.py
-│   └── decrypt.py
-│
 ├── integrity/
-│   └── hash_manager.py
-│
 ├── routes/
-│   └── files.py
-│
 ├── templates/
-│
 ├── tests/
-│
 ├── sample_files/
+├── assets/
+│   └── ed-vault-banner.png
 │
-├── instance/
-│
-├── .env
+├── README.md
+├── DIAGRAMS.md
+├── PROJECT_DOCUMENTATION.md
+├── SYSTEM_ARCHITECTURE.md
+├── SECURITY_DOCUMENTATION.md
+├── TESTING_REPORT.md
+├── requirements.txt
 └── .gitignore
 ```
 
@@ -157,13 +156,13 @@ E_D Vault/
 ### Prerequisites
 - Python 3.10 or newer.
 - pip.
-- Git (optional).
+- Git.
 
 ### 1. Clone the repository
 
 ```bash
-git clone YOUR_REPOSITORY_URL
-cd "E_D Vault"
+git clone https://github.com/inkmathur/E-D-Vault.git
+cd E-D-Vault
 ```
 
 ### 2. Create a virtual environment
@@ -182,8 +181,6 @@ Windows PowerShell:
 
 ### 4. Install dependencies
 
-Install the project's required Python packages using its dependency list.
-
 ```bash
 pip install -r requirements.txt
 ```
@@ -198,6 +195,8 @@ SESSION_COOKIE_SECURE=false
 ```
 
 Generate a strong random secret key. Never publish your real `.env` file.
+
+For a local HTTP development environment, `SESSION_COOKIE_SECURE=false` is appropriate. Use HTTPS and enable secure cookies in production.
 
 ### 6. Run the application
 
@@ -225,6 +224,16 @@ The project includes tests for:
 - Database security.
 - HTTP security headers.
 
+## 📚 Project Documentation
+
+| Document | Description |
+|---|---|
+| [Project Documentation](PROJECT_DOCUMENTATION.md) | Complete technical project overview |
+| [System Architecture](SYSTEM_ARCHITECTURE.md) | Architecture and workflows |
+| [Security Documentation](SECURITY_DOCUMENTATION.md) | Security controls and threat model |
+| [Testing Report](TESTING_REPORT.md) | Testing approach and reported results |
+| [Diagrams](DIAGRAMS.md) | System and database diagrams |
+
 ## ⚠️ Current Limitations
 
 - The current encryption prototype supports files up to 100 MB.
@@ -246,15 +255,21 @@ The project includes tests for:
 
 ## 👨‍💻 Project Information
 
-**Project Name:** E/D Vault  
-**Full Name:** Encryption and Decryption Vault  
-**Category:** Cybersecurity / Cryptography  
-**Version:** 1.0  
-**Project Type:** Personal Project  
-**Primary Language:** Python
+| Detail | Information |
+|---|---|
+| Project Name | E/D Vault |
+| Full Name | Encryption and Decryption Vault |
+| Category | Cybersecurity / Cryptography |
+| Version | 1.0 |
+| Project Type | Personal Project |
+| Primary Language | Python |
 
 ---
 
-### 🔐 Secure Your Files. Protect Your Privacy.
+<p align="center">
+  **🔐 Secure Your Files. Protect Your Privacy.**
+</p>
 
-E/D Vault is a personal cybersecurity project focused on practical cryptography, secure file handling, and data protection.
+<p align="center">
+  Built as a personal cybersecurity project to explore practical cryptography, secure file handling, and data protection.
+</p>
